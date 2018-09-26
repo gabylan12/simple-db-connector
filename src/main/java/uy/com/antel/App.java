@@ -2,9 +2,7 @@ package uy.com.antel;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 /**
@@ -21,6 +19,8 @@ public class App {
     private static String user = "myuser";
 
     private static String password = "userpass";
+
+    private static Connection connection = null;
 
     private static void setupDatabase(){
         //set up database
@@ -71,21 +71,62 @@ public class App {
 
     }
 
+    private static void connectDatabase() throws ClassNotFoundException, SQLException {
+        Class.forName("org.postgresql.Driver");
+        connection = DriverManager.getConnection(
+                "jdbc:postgresql://"+server+":"+port+"/"+ database,user, password);
+    }
+
+    private static void executeCommand() throws SQLException {
+        while(true) {
+            try {
+                System.out.println("->");
+                Scanner scanner = new Scanner(System.in);
+                String token = scanner.nextLine();
+                if (!"quit".equalsIgnoreCase(token)) {
+                    Statement statement = connection.createStatement();
+                    if (token.toLowerCase().startsWith("select")) {
+                        ResultSet rs = statement.executeQuery(token);
+                        while (rs.next()) {
+                            for (int i =1;i<=rs.getMetaData().getColumnCount();i++){
+                                System.out.print(rs.getMetaData().getColumnLabel(i) + "=");
+                                System.out.print(rs.getObject(i) + "\t");
+                            }
+                            System.out.println();
+                        }
+                        rs.close();
+                    } else {
+                        statement.execute(token);
+                        System.out.println("Sentencia ejecutada");
+
+                    }
+                } else {
+                    break;
+                }
+            }
+            catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
     public static void main( String[] args )   {
         try {
 
             setupDatabase();
-            Class.forName("org.postgresql.Driver");
-            Connection connection = null;
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://"+server+":"+port+"/"+ database,user, password);
+
+            connectDatabase();
+
+            executeCommand();
+
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
-        System.out.println( "Hello World!" );
+        System.out.println( "Fin de la ejecución" );
     }
+
+
 }

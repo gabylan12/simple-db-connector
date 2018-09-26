@@ -24,7 +24,7 @@ public class App {
 
     private static void setupDatabase(){
         //set up database
-        System.out.println("Ingresar servidor [localhost]: ");
+        System.out.print("Ingresar servidor [localhost]: ");
         Scanner scanner = new Scanner(System.in);
         String token = scanner.nextLine();
         if(!StringUtils.isEmpty(token)){
@@ -33,7 +33,7 @@ public class App {
         }
 
         //set up port
-        System.out.println("Ingresar puerto [5432]: ");
+        System.out.print("Ingresar puerto [5432]: ");
         scanner = new Scanner(System.in);
         token = scanner.nextLine();
         if(!StringUtils.isEmpty(token)){
@@ -42,7 +42,7 @@ public class App {
         }
 
         //set up database name
-        System.out.println("Ingresar base de datos [mydatabase]: ");
+        System.out.print("Ingresar base de datos [mydatabase]: ");
         scanner = new Scanner(System.in);
         token = scanner.nextLine();
         if(!StringUtils.isEmpty(token)){
@@ -51,7 +51,7 @@ public class App {
         }
 
         //set up user
-        System.out.println("Ingresar usuario [myuser]: ");
+        System.out.print("Ingresar usuario [myuser]: ");
         scanner = new Scanner(System.in);
         token = scanner.nextLine();
         if(!StringUtils.isEmpty(token)){
@@ -60,7 +60,7 @@ public class App {
         }
 
         //set up password
-        System.out.println("Ingresar password [userpass]: ");
+        System.out.print("Ingresar password [userpass]: ");
         scanner = new Scanner(System.in);
         token = scanner.nextLine();
         if(!StringUtils.isEmpty(token)){
@@ -80,7 +80,7 @@ public class App {
     private static void executeCommand() throws SQLException {
         while(true) {
             try {
-                System.out.println("->");
+                System.out.print("->");
                 Scanner scanner = new Scanner(System.in);
                 String token = scanner.nextLine();
                 if (!"quit".equalsIgnoreCase(token)) {
